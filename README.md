@@ -12,3 +12,8 @@ Than just run the below lines sequentially
 npm install //To install all dependent npm packages
 npm run test //Run Test
 ```
+
+### Postman Scripts
+Added postman file that includes the tests too.
+Just Import the Json file and replace the <token>.
+Run as a collection
