@@ -1,0 +1,249 @@
+{
+	"info": {
+		"_postman_id": "b1043b9c-5f17-4284-853c-529a88153ea6",
+		"name": "Tinder",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Get Channels List",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"var channelName = JSON.parse(responseBody)['channels'][2]['name'];",
+							"pm.collectionVariables.set('channelName', channelName);",
+							"pm.test(\"Channel test-project exists\", function () {",
+							"    pm.expect(channelName).to.eql('test-project');",
+							"});",
+							"pm.test(\"Channel project does not exists (Negative Case)\", function () {",
+							"    pm.expect(channelName).to.not.eql('project');",
+							"});",
+							"console.log(channelName);"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "<token>",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "<token>",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{Host}}/api/conversations.list?pretty=1",
+					"host": [
+						"{{Host}}"
+					],
+					"path": [
+						"api",
+						"conversations.list"
+					],
+					"query": [
+						{
+							"key": "pretty",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Post Message on Slack",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"var jsonData = pm.response.json();",
+							"pm.test(\"check ok status\", function () {",
+							"    pm.expect(jsonData['ok']).to.eql(true);",
+							"});",
+							"pm.test(\"check same user used\", function () {",
+							"    pm.expect(jsonData['message']['user']).to.eql(\"U027L0P6PQV\");",
+							"});",
+							"pm.test(\"check if posting to right channel\", function () {",
+							"    pm.expect(jsonData['channel']).to.eql(\"C0281LR3JRX\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{Host}}/api/chat.postMessage?channel={{channelName}}&as_user=true&text=Hellooooo&pretty=1",
+					"host": [
+						"{{Host}}"
+					],
+					"path": [
+						"api",
+						"chat.postMessage"
+					],
+					"query": [
+						{
+							"key": "channel",
+							"value": "{{channelName}}"
+						},
+						{
+							"key": "as_user",
+							"value": "true"
+						},
+						{
+							"key": "text",
+							"value": "Hellooooo"
+						},
+						{
+							"key": "pretty",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Schedule Message",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"var moment = require('moment');",
+							"var timestamp = Math.ceil(((moment().valueOf() / 1000)) + 10);",
+							"pm.collectionVariables.set('timestamp',timestamp);",
+							"console.log(moment().valueOf());",
+							"console.log(timestamp);",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"var jsonData = pm.response.json();",
+							"pm.test(\"check ok status\", function () {",
+							"    pm.expect(jsonData['ok']).to.eql(true);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{Host}}/api/chat.scheduleMessage?channel={{channelName}}&post_at={{timestamp}}&text=Scheduled Msg at epoch time {{timestamp}}&pretty=1",
+					"host": [
+						"{{Host}}"
+					],
+					"path": [
+						"api",
+						"chat.scheduleMessage"
+					],
+					"query": [
+						{
+							"key": "channel",
+							"value": "{{channelName}}"
+						},
+						{
+							"key": "post_at",
+							"value": "{{timestamp}}"
+						},
+						{
+							"key": "text",
+							"value": "Scheduled Msg at epoch time {{timestamp}}"
+						},
+						{
+							"key": "pretty",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "channelName",
+			"value": ""
+		},
+		{
+			"key": "token",
+			"value": "91fe51b1f4cd3571c469dc2f38c3d5e9"
+		},
+		{
+			"key": "token",
+			"value": ""
+		},
+		{
+			"key": "timestamp",
+			"value": ""
+		}
+	]
+}
