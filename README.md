@@ -2,3 +2,11 @@
 1. Get List of channels from the workspace.
 2. Post Messages to a specific channel.
 3. Schedule to send messages after 10 seconds if current time.
+
+### Steps to Run
+Replace <token> in testScript.js with the token obtained from Slack.
+Than just run the below lines sequentially
+```
+nom install //To install all npm packages
+npm run test //Run Test
+```
