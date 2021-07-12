@@ -7,6 +7,6 @@
 Replace <token> in testScript.js with the token obtained from Slack.
 Than just run the below lines sequentially
 ```
-nom install //To install all npm packages
+npm install //To install all dependent npm packages
 npm run test //Run Test
 ```
