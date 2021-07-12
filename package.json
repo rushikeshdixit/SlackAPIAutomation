@@ -1,0 +1,15 @@
+{
+  "name": "slackapiautomation",
+  "version": "1.0.0",
+  "description": "Slack API Test Scenarios",
+  "scripts": {
+    "test": "mocha tests/*"
+  },
+  "author": "Rushikesh Dixit",
+  "devDependencies": {
+    "chai": "^4.3.4",
+    "chakram": "^1.5.0",
+    "mocha": "^9.0.2",
+    "moment": "2.29.1"
+  }
+}
